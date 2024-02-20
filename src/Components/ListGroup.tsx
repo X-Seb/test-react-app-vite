@@ -1,25 +1,34 @@
 import { useState } from "react";
 import Task from "./Task";
 
-function ListGroup() {
-  let tasks = ["clean the dishes", "finish homework", "idk"];
+interface PropsListGroup {
+  items: string[];
+  heading: string;
+  onSelectItem: (item: string) => void;
+}
+
+function ListGroup({ items: items, heading, onSelectItem }: PropsListGroup) {
   const [selectedIndex, setSelectedIndex] = useState(-1);
 
   return (
     <>
-      <h1>Here are your tasks: </h1>
-      {tasks.length === 0 && <p>You have no tasks.</p>}
+      <h1>{heading}</h1>
+      {items.length === 0 && <p>You have no tasks.</p>}
       <ul className="list-group">
-        {tasks.map((task, index) => (
+        {items.map((task, index) => (
           <li
+            style={
+              selectedIndex === index ? { color: "red" } : { color: "white" }
+            }
             className={
               selectedIndex === index
-                ? "list-group-item active"
-                : "list-group-item"
+                ? "list-group-item list-group-item-danger"
+                : "list-group-item list-group-item-light"
             }
             key={task}
             onClick={() => {
               setSelectedIndex(index);
+              onSelectItem(items[index]);
             }}
           >
             {task}
